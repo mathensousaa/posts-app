@@ -13,25 +13,114 @@
   </head>
   <body>
     <div class="container vh-100 p-4">
+      <div class="w-100 flex justify-content-end">
+        <form action="/logout" method="post">
+          <input type="hidden" name="_method" value="logout" />
+          <button type="submit" class="btn btn-secondary">Sair</button>
+        </form>
+      </div>
+
       <h1>Posts</h1>
 
       <form action="/posts" method="post">
-        <div class="mb-3">
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            name="title"
+            id="title"
+            value="<%= typeof form !== 'undefined' && form && form.title ? form.title : '' %>"
+          />
           <label for="title" class="form-label">Título</label>
-          <input type="text" class="form-control" name="title" id="title" />
         </div>
         <div class="form-floating mb-3">
-          <textarea
+          <input
+            type="text"
             class="form-control"
-            placeholder="No que você está pensando?"
             name="content"
             id="content"
-          ></textarea>
-          <label for="content">Conteúdo</label>
+            value="<%= typeof form !== 'undefined' && form && form.content ? form.content : '' %>"
+          />
+          <label for="content" class="form-label">Conteúdo</label>
         </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
 
         <button type="submit" class="btn btn-primary w-100">Criar Post</button>
       </form>
+
+      <section class="container mt-4">
+        <h2>Timeline</h2>
+
+        <% if (typeof posts !== 'undefined' && posts && posts.length) { %> <%
+        posts.forEach(post => { %>
+        <div class="card mt-2">
+          <div class="card-body">
+            <h6 class="card-title"><%= post.title %></h6>
+            <p class="card-text"><%= post.content %></p>
+          </div>
+          <% if (typeof user !== 'undefined' && user && user.id === post.userId)
+          { %>
+          <div class="card-footer flex justify-content-center">
+            <form action="/posts/delete/<%= post.id %>" method="post">
+              <input type="hidden" name="_method" value="delete" />
+              <button type="submit" class="btn btn-secondary">Deletar</button>
+            </form>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#editPostModal"
+            >
+              Editar
+            </button>
+
+            <div
+              class="modal fade"
+              id="editPostModal"
+              tabindex="-1"
+              aria-labelledby="editPostModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editPostModalLabel">
+                      Editar Post
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">...</div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                      Save changes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% } %>
+        </div>
+        <% }) %> <% } else { %>
+        <p>Nenhum post encontrado</p>
+        <% } %>
+      </section>
     </div>
 
     <script

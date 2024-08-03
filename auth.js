@@ -10,11 +10,20 @@ module.exports = {
         { usernameField: "email" },
         async (email, password, done) => {
           const user = await User.findOne({ where: { email } });
-          if (!user) return done(null, false);
-          if (password !== user.password) {
-            return done(null, false);
-          }
-          return done(null, user);
+          if (!user)
+            return done(null, false, {
+              status: "error",
+              message: "Usuário ou senha incorretos",
+            });
+          if (!bcrypt.compareSync(password, user.password))
+            return done(null, false, {
+              status: "error",
+              message: "Usuário ou senha incorretos",
+            });
+          return done(null, user, {
+            status: "success",
+            message: "Usuário logado com sucesso",
+          });
         }
       )
     );

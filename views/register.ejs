@@ -17,13 +17,23 @@
     >
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Login</h5>
+          <h5 class="card-title">Criar conta</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">
-            Logue-se para começar a ver os posts
+            Registre-se para começar a usar o Twitter
           </h6>
 
           <div class="d-flex flex-column gap-2">
-            <form action="/login" method="post">
+            <form action="/register" method="post">
+              <div class="mb-3">
+                <label for="name" class="form-label">Nome Completo</label>
+                <input
+                  type="name"
+                  class="form-control"
+                  name="name"
+                  id="name"
+                  aria-describedby="name-help"
+                />
+              </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input
@@ -49,12 +59,12 @@
               <% } %>
 
               <button type="submit" class="btn btn-primary w-100">
-                Entrar
+                Criar conta
               </button>
             </form>
 
             <div class="w-100 flex justify-items-center text-end">
-              <a href="/register" class="card-link">Cadastro</a>
+              <a href="/login" class="card-link">Login</a>
             </div>
           </div>
         </div>
